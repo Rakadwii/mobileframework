@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Tugas/Tugas12/DrawerScreen.dart';
 import 'package:flutter_application_1/Tugas/Tugas12/Models/Chart_model.dart';
 
-class Telegram extends StatefulWidget {
-  const Telegram({Key? key}) : super(key: key);
+class Telegram16 extends StatefulWidget {
+  const Telegram16({Key? key}) : super(key: key);
 
   @override
   _TelegramState createState() => _TelegramState();
 }
 
-class _TelegramState extends State<Telegram> {
+class _TelegramState extends State<Telegram16> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
