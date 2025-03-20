@@ -6,6 +6,14 @@ import 'package:flutter_application_1/Tugas/Tugas12/account_screen.dart';
 import 'package:flutter_application_1/Tugas/Tugas12/DrawerScreen.dart';
 import 'package:flutter_application_1/Tugas/Tugas12/Telegram16.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
+import 'form_register.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'demoPage.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:flutter_application_1/home.dart';
+import 'package:flutter_application_1/controller/demoController.dart';
+import 'package:flutter_application_1/controller/purchase.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -652,316 +660,356 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 
 // Acara 26
 
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: "Belajar Form Flutter",
+    home: BelajarForm(),
+  ));
+}
+
+class BelajarForm extends StatefulWidget {
+  @override
+  _BelajarFormState createState() => _BelajarFormState();
+}
+
+class _BelajarFormState extends State<BelajarForm> {
+  final _formKey = GlobalKey<FormState>();
+  double nilaiSlider = 1;
+  bool nilaiCheckBox = false;
+  bool nilaiSwitch = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Belajar Form Flutter"),
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "contoh: Raka Dwi Irsyad Firdaus",
+                      labelText: "Nama Lengkap",
+                      icon: const Icon(Icons.people),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nama tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      icon: const Icon(Icons.security),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                CheckboxListTile(
+                  title: const Text('Belajar Dasar Flutter'),
+                  subtitle: const Text('Dart, widget, http'),
+                  value: nilaiCheckBox,
+                  activeColor: Colors.deepPurpleAccent,
+                  onChanged: (value) {
+                    setState(() {
+                      nilaiCheckBox = value ?? false;
+                    });
+                  },
+                ),
+                SwitchListTile(
+                  title: const Text('Backend Programming'),
+                  subtitle: const Text('Dart, NodeJs, PHP, Java, dll'),
+                  value: nilaiSwitch,
+                  activeTrackColor: Colors.pink[100],
+                  activeColor: Colors.red,
+                  onChanged: (value) {
+                    setState(() {
+                      nilaiSwitch = value;
+                    });
+                  },
+                ),
+                Slider(
+                  value: nilaiSlider,
+                  min: 0,
+                  max: 100,
+                  onChanged: (value) {
+                    setState(() {
+                      nilaiSlider = value;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text("Submit",
+                      style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Proses validasi sukses
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Acara 27
+
 // void main() {
 //   runApp(MaterialApp(
-//     debugShowCheckedModeBanner: false,
-//     title: "Belajar Form Flutter",
-//     home: BelajarForm(),
+//     home: Home(),
 //   ));
 // }
 
-// class BelajarForm extends StatefulWidget {
+// class Home extends StatefulWidget {
 //   @override
-//   _BelajarFormState createState() => _BelajarFormState();
+//   _HomeState createState() => _HomeState();
 // }
 
-// class _BelajarFormState extends State<BelajarForm> {
-//   final _formKey = GlobalKey<FormState>();
-//   double nilaiSlider = 1;
-//   bool nilaiCheckBox = false;
-//   bool nilaiSwitch = true;
+// class _HomeState extends State<Home> {
+//   // List agama
+//   List<String> agama = [
+//     "Islam",
+//     "Kristen Protestan",
+//     "Kristen Katolik",
+//     "Hindu",
+//     "Budha"
+//   ];
+
+//   // Variabel untuk menyimpan nilai
+//   String _agama = "Islam";
+//   String _jk = "";
+
+//   // Controller untuk TextField
+//   TextEditingController controllerNama = new TextEditingController();
+//   TextEditingController controllerPass = new TextEditingController();
+//   TextEditingController controllerMoto = new TextEditingController();
+
+//   // Fungsi memilih jenis kelamin
+//   void _pilihJk(String value) {
+//     setState(() {
+//       _jk = value;
+//     });
+//   }
+
+//   // Fungsi memilih agama
+//   void pilihAgama(String value) {
+//     setState(() {
+//       _agama = value;
+//     });
+//   }
+
+//   // Fungsi mengirim data
+//   void kirimdata() {
+//     AlertDialog alertDialog = new AlertDialog(
+//       content: new Container(
+//         height: 200.0,
+//         child: new Column(
+//           children: <Widget>[
+//             new Text("Nama Lengkap : ${controllerNama.text}"),
+//             new Text("Password : ${controllerPass.text}"),
+//             new Text("Moto Hidup : ${controllerMoto.text}"),
+//             new Text("Jenis Kelamin : $_jk"),
+//             new Text("Agama : $_agama"),
+//             new ElevatedButton(
+//               child: new Text("OK"),
+//               onPressed: () => Navigator.pop(context),
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Colors.teal,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//     showDialog(context: context, builder: (_) => alertDialog);
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Belajar Form Flutter"),
+//       appBar: new AppBar(
+//         leading: new Icon(Icons.list),
+//         title: new Text("Data diri"),
+//         backgroundColor: Colors.teal,
 //       ),
-//       body: Form(
-//         key: _formKey,
-//         child: SingleChildScrollView(
-//           child: Container(
-//             padding: const EdgeInsets.all(20.0),
-//             child: Column(
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: TextFormField(
-//                     decoration: InputDecoration(
-//                       hintText: "contoh: Raka Dwi Irsyad Firdaus",
-//                       labelText: "Nama Lengkap",
-//                       icon: const Icon(Icons.people),
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(5.0),
-//                       ),
+//       body: new ListView(
+//         children: [
+//           new Container(
+//             padding: new EdgeInsets.all(10.0),
+//             child: new Column(
+//               children: <Widget>[
+//                 new TextField(
+//                   controller: controllerNama,
+//                   decoration: new InputDecoration(
+//                     hintText: "Nama Lengkap",
+//                     labelText: "Nama Lengkap",
+//                     border: new OutlineInputBorder(
+//                       borderRadius: new BorderRadius.circular(20.0),
 //                     ),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Nama tidak boleh kosong';
-//                       }
-//                       return null;
-//                     },
 //                   ),
 //                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: TextFormField(
-//                     obscureText: true,
-//                     decoration: InputDecoration(
-//                       labelText: "Password",
-//                       icon: const Icon(Icons.security),
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(5.0),
-//                       ),
+//                 new Padding(
+//                   padding: new EdgeInsets.only(top: 20.0),
+//                 ),
+//                 new TextField(
+//                   controller: controllerPass,
+//                   obscureText: true,
+//                   decoration: new InputDecoration(
+//                     hintText: "Password",
+//                     labelText: "Password",
+//                     border: new OutlineInputBorder(
+//                       borderRadius: new BorderRadius.circular(20.0),
 //                     ),
-//                     validator: (value) {
-//                       if (value == null || value.isEmpty) {
-//                         return 'Password tidak boleh kosong';
-//                       }
-//                       return null;
-//                     },
 //                   ),
 //                 ),
-//                 CheckboxListTile(
-//                   title: const Text('Belajar Dasar Flutter'),
-//                   subtitle: const Text('Dart, widget, http'),
-//                   value: nilaiCheckBox,
-//                   activeColor: Colors.deepPurpleAccent,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       nilaiCheckBox = value ?? false;
-//                     });
-//                   },
+//                 new Padding(
+//                   padding: new EdgeInsets.only(top: 20.0),
 //                 ),
-//                 SwitchListTile(
-//                   title: const Text('Backend Programming'),
-//                   subtitle: const Text('Dart, NodeJs, PHP, Java, dll'),
-//                   value: nilaiSwitch,
-//                   activeTrackColor: Colors.pink[100],
-//                   activeColor: Colors.red,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       nilaiSwitch = value;
-//                     });
-//                   },
+//                 new TextField(
+//                   controller: controllerMoto,
+//                   maxLines: 3,
+//                   decoration: new InputDecoration(
+//                     hintText: "Moto Hidup",
+//                     labelText: "Moto Hidup",
+//                     border: new OutlineInputBorder(
+//                       borderRadius: new BorderRadius.circular(20.0),
+//                     ),
+//                   ),
 //                 ),
-//                 Slider(
-//                   value: nilaiSlider,
-//                   min: 0,
-//                   max: 100,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       nilaiSlider = value;
-//                     });
-//                   },
+//                 new Padding(
+//                   padding: new EdgeInsets.only(top: 20.0),
 //                 ),
+//                 new RadioListTile(
+//                   value: "laki-laki",
+//                   title: new Text("Laki-Laki"),
+//                   groupValue: _jk,
+//                   onChanged: (String? value) {
+//                     _pilihJk(value!);
+//                   },
+//                   activeColor: Colors.blue,
+//                   subtitle: new Text("Pilih ini jika anda Laki-laki"),
+//                 ),
+//                 new RadioListTile(
+//                   value: "perempuan",
+//                   title: new Text("Perempuan"),
+//                   groupValue: _jk,
+//                   onChanged: (String? value) {
+//                     _pilihJk(value!);
+//                   },
+//                   activeColor: Colors.blue,
+//                   subtitle: new Text("Pilih ini jika anda perempuan"),
+//                 ),
+//                 new Padding(
+//                   padding: new EdgeInsets.only(top: 20.0),
+//                 ),
+//                 new Row(
+//                   children: <Widget>[
+//                     new Text(
+//                       "Agama ",
+//                       style: new TextStyle(fontSize: 18.0, color: Colors.blue),
+//                     ),
+//                     new Padding(
+//                       padding: new EdgeInsets.only(right: 20.0),
+//                     ),
+//                     DropdownButton<String>(
+//                       value: _agama,
+//                       onChanged: (String? newValue) {
+//                         pilihAgama(newValue!);
+//                       },
+//                       items: agama.map((String value) {
+//                         return DropdownMenuItem<String>(
+//                           value: value,
+//                           child: Text(value),
+//                         );
+//                       }).toList(),
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(height: 20.0),
 //                 ElevatedButton(
-//                   child: const Text("Submit",
-//                       style: TextStyle(color: Colors.white)),
+//                   child: Text("OK"),
+//                   onPressed: kirimdata,
 //                   style: ElevatedButton.styleFrom(
 //                     backgroundColor: Colors.blue,
 //                   ),
-//                   onPressed: () {
-//                     if (_formKey.currentState!.validate()) {
-//                       // Proses validasi sukses
-//                     }
-//                   },
 //                 ),
 //               ],
 //             ),
 //           ),
-//         ),
+//         ],
 //       ),
 //     );
 //   }
 // }
 
-//Acara 27
+// Acara 28
 
-void main() {
-  runApp(MaterialApp(
-    home: Home(),
-  ));
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: FormRegister(),
+//     );
+//   }
+// }
 
-class _HomeState extends State<Home> {
-  // List agama
-  List<String> agama = [
-    "Islam",
-    "Kristen Protestan",
-    "Kristen Katolik",
-    "Hindu",
-    "Budha"
-  ];
+//Acara 29-32
 
-  // Variabel untuk menyimpan nilai
-  String _agama = "Islam";
-  String _jk = "";
+// void main() {
+//   // Inisialisasi controller hanya di sini
+//   Get.put(DemoController());
+//   Get.put(Purchase());
 
-  // Controller untuk TextField
-  TextEditingController controllerNama = new TextEditingController();
-  TextEditingController controllerPass = new TextEditingController();
-  TextEditingController controllerMoto = new TextEditingController();
+//   runApp(MyApp());
+// }
 
-  // Fungsi memilih jenis kelamin
-  void _pilihJk(String value) {
-    setState(() {
-      _jk = value;
-    });
-  }
-
-  // Fungsi memilih agama
-  void pilihAgama(String value) {
-    setState(() {
-      _agama = value;
-    });
-  }
-
-  // Fungsi mengirim data
-  void kirimdata() {
-    AlertDialog alertDialog = new AlertDialog(
-      content: new Container(
-        height: 200.0,
-        child: new Column(
-          children: <Widget>[
-            new Text("Nama Lengkap : ${controllerNama.text}"),
-            new Text("Password : ${controllerPass.text}"),
-            new Text("Moto Hidup : ${controllerMoto.text}"),
-            new Text("Jenis Kelamin : $_jk"),
-            new Text("Agama : $_agama"),
-            new ElevatedButton(
-              child: new Text("OK"),
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    showDialog(context: context, builder: (_) => alertDialog);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        leading: new Icon(Icons.list),
-        title: new Text("Data diri"),
-        backgroundColor: Colors.teal,
-      ),
-      body: new ListView(
-        children: [
-          new Container(
-            padding: new EdgeInsets.all(10.0),
-            child: new Column(
-              children: <Widget>[
-                new TextField(
-                  controller: controllerNama,
-                  decoration: new InputDecoration(
-                    hintText: "Nama Lengkap",
-                    labelText: "Nama Lengkap",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
-                new TextField(
-                  controller: controllerPass,
-                  obscureText: true,
-                  decoration: new InputDecoration(
-                    hintText: "Password",
-                    labelText: "Password",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
-                new TextField(
-                  controller: controllerMoto,
-                  maxLines: 3,
-                  decoration: new InputDecoration(
-                    hintText: "Moto Hidup",
-                    labelText: "Moto Hidup",
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
-                new RadioListTile(
-                  value: "laki-laki",
-                  title: new Text("Laki-Laki"),
-                  groupValue: _jk,
-                  onChanged: (String? value) {
-                    _pilihJk(value!);
-                  },
-                  activeColor: Colors.blue,
-                  subtitle: new Text("Pilih ini jika anda Laki-laki"),
-                ),
-                new RadioListTile(
-                  value: "perempuan",
-                  title: new Text("Perempuan"),
-                  groupValue: _jk,
-                  onChanged: (String? value) {
-                    _pilihJk(value!);
-                  },
-                  activeColor: Colors.blue,
-                  subtitle: new Text("Pilih ini jika anda perempuan"),
-                ),
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
-                new Row(
-                  children: <Widget>[
-                    new Text(
-                      "Agama ",
-                      style: new TextStyle(fontSize: 18.0, color: Colors.blue),
-                    ),
-                    new Padding(
-                      padding: new EdgeInsets.only(right: 20.0),
-                    ),
-                    DropdownButton<String>(
-                      value: _agama,
-                      onChanged: (String? newValue) {
-                        pilihAgama(newValue!);
-                      },
-                      items: agama.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.0),
-                ElevatedButton(
-                  child: Text("OK"),
-                  onPressed: kirimdata,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'My Flutter App',
+//       home: HomePage(),
+//       getPages: [
+//         GetPage(name: '/cart', page: () => DemoPage()),
+//       ],
+//     );
+//   }
+// }
